@@ -15,7 +15,7 @@ const config = {
 
 sql.connect(config).catch(err => console.log(err));
 
-app.get('/',(req,res) =>{
+app.post('/',(req,res) =>{
     let request = new sql.Request();
     let webhookResponse = {
         "fulfillmentText": "Sent a response from Azure!"
