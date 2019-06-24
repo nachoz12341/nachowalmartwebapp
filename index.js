@@ -15,17 +15,15 @@ const config = {
 
 sql.connect(config).catch(err => console.log(err));
 
-app.post('/',(req,res) =>{
-    let request = new sql.Request();
-    let webhookResponse = {
-        "fulfillmentText": "Sent a response from Azure!"
-    };
+app.post('/', (req, res) => {
+    let data = '';
+    req.on('data', (chunk) => { data += chunk; });
+    req.on('end', () => {
+        let intent=data;
 
-    request.query("INSERT INTO books (title, author, id) VALUES ('dialogflow test','Nacho',69);").then(result => {
-        res.send(webhookResponse);
+        app.send({"fullfillmentText": "Receieved data: "+intent});
     });
 });
 
 const port = process.env.PORT || 1337;
-
-app.listen(port,() => console.log('Example app listening on port 8080'));
+app.listen(port);
