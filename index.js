@@ -124,9 +124,9 @@ function findDescriptionSource(response, source) {
             while (json.articles[articleNum].description === null && articleNum < 10)
                 articleNum++;
 
-            var response = 'Here is some more information. ' + json.articles[articleNum].description + '. If you would like to hear more news, simply ask. You can specify country, topic or source.';
+            var responseText = 'Here is some more information. ' + json.articles[articleNum].description + '. If you would like to hear more news, simply ask. You can specify country, topic or source.';
 
-            resolve(agent.add(response));
+            response.send(responseText);
         });
         res.on('error', (e) => { console.log(e); });
     });
