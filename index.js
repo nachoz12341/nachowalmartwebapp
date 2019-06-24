@@ -22,10 +22,14 @@ var sourceMap = {
 app.post('/', (req, res) => {
     let data = '';
 
-    console.log("Params: "+req.body);
-
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
+
+        console.log("---------------------------");
+        console.log("url: "+req.param);
+        console.log("Body: "+req.body);
+        console.log("---------------------------");
+
         const session = JSON.parse(data);
         const intentName = session.queryResult.intent.displayName;
         let responseText = "This is the default response: " + intentName;
