@@ -20,9 +20,8 @@ app.post('/', (req, res) => {
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
         let session = JSON.parse(data);        
-        //let intent = session.fulfillmentText;
 
-        res.send({ "fulfillmentText": JSON.stringify(session.intent)});
+        res.send({ "fulfillmentText": JSON.stringify(session)});
     });
 });
 
