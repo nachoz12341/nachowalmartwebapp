@@ -21,10 +21,10 @@ app.post('/', (req, res) => {
     req.on('end', () => {
         const session = JSON.parse(data);
         const intentName = session.queryResult.intent.dispalyName;
-        let responseText = "This is the default response";
+        let responseText = "This is the default response: "+intentName;
 
         if (intentName === "testConnection")
-            responseText = "The test has successfully responded.";
+            responseText = "The test has successfully responded: "+intentName;
 
         res.send({ "fulfillmentText": responseText });
     });
