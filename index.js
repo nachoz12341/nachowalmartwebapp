@@ -57,7 +57,7 @@ app.post('/', (req, res) => {
         let responseText = "This is the default response: " + intentName;
 
         if (intentName === "testConnection") {
-            responseText = "The test has successfully responded: " + JSON.stringify(session);
+            responseText = "The test has completed successfully, the azure server is up.";
             res.send({ "fulfillmentText": responseText });
         }
 
