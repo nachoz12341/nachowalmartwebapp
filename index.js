@@ -22,7 +22,7 @@ var sourceMap = {
 app.post('/', (req, res) => {
     let data = '';
 
-    console.log("Got post request");
+    console.log("Params: "+req.param);
 
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
