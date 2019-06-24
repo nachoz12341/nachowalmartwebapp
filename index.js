@@ -29,7 +29,7 @@ app.post('/', (req, res) => {
         let responseText = "This is the default response: " + intentName;
 
         if (intentName === "testConnection") {
-            responseText = "The test has successfully responded: " + session;
+            responseText = "The test has successfully responded: " + JSON.stringify(session);
             res.send({ "fulfillmentText": responseText });
         }
 
