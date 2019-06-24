@@ -50,6 +50,8 @@ var categoryMap = {
 app.post('/', (req, res) => {
     let data = '';
 
+    console.log(req.headers);
+
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
         const session = JSON.parse(data);
