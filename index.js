@@ -7,6 +7,7 @@ app.get('/',(req,res) =>{
     };
 
     res.send(webhookResponse);
+    res.sendStatus(200);
 });
 
 const port = process.env.PORT || 1337;
