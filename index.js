@@ -21,7 +21,7 @@ app.post('/', (req, res) => {
     req.on('end', () => {
         let session = JSON.parse(data);        
 
-        res.send({ "fulfillmentText": JSON.stringify(session.responseId)});
+        res.send({ "fulfillmentText": JSON.stringify(session.intent.displayName)});
     });
 });
 
