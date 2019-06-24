@@ -66,22 +66,20 @@ app.post('/', (req, res) => {
             findHeadlineSource(res, source);
         }
 
-        if(intentName === "headlineCountryCategory")
-        {
+        if (intentName === "headlineCountryCategory") {
             const country = countryMap[session.queryResult.parameters.country];
             const category = categoryMap[session.queryResult.parameters.category];
-            findHeadlineCountryCategory(res,country,category);
+            findHeadlineCountryCategory(res, country, category);
         }
         if (intentName === "descriptionSource") {
             const source = sourceMap[session.queryResult.parameters.source];
             findDescriptionSource(res, source);
         }
 
-        if(intentName === "descriptionCountryCategory")
-        {
+        if (intentName === "descriptionCountryCategory") {
             const country = countryMap[session.queryResult.parameters.country];
             const category = categoryMap[session.queryResult.parameters.category];
-            findDescriptionCountryCategory(res,country,category);
+            findDescriptionCountryCategory(res, country, category);
         }
 
     });
@@ -114,19 +112,19 @@ function findHeadlineSource(response, source) {
 
 function findDescriptionSource(response, source) {
     https.get('https://newsapi.org/v2/top-headlines?sources=' + source + '&apiKey=0eefa07bb1bb480bad3277dcfc313086', (res) => {
-        var body = '';
+        let body = '';
 
         res.on('data', (d) => { body += d; });
         res.on('end', () => {
-            var json = JSON.parse(body);
-            var articleNum = 0;
+            const json = JSON.parse(body);
+            let articleNum = 0;
 
             while (json.articles[articleNum].description === null && articleNum < 10)
                 articleNum++;
 
-            var responseText = 'Here is some more information. ' + json.articles[articleNum].description + '. If you would like to hear more news, simply ask. You can specify country, topic or source.';
+            const responseText = 'Here is some more information. ' + json.articles[articleNum].description + '. If you would like to hear more news, simply ask. You can specify country, topic or source.';
 
-            response.send(responseText);
+            response.send({ "fulfillmentText": responseText });
         });
         res.on('error', (e) => { console.log(e); });
     });
@@ -134,19 +132,19 @@ function findDescriptionSource(response, source) {
 
 function findHeadlineCountryCategory(response, country, category) {
     https.get('https://newsapi.org/v2/top-headlines?country=' + country + '&category=' + category + '&apiKey=0eefa07bb1bb480bad3277dcfc313086', (res) => {
-        var body = '';
+        let body = '';
 
         res.on('data', (d) => { body += d; });
         res.on('end', () => {
-            var json = JSON.parse(body);
-            var articleNum = 0;
+            const json = JSON.parse(body);
+            let articleNum = 0;
 
             while (json.articles[articleNum].description === null && articleNum < 10)
                 articleNum++;
 
             const responseText = 'This headline is from ' + json.articles[articleNum].source.name + ', ' + json.articles[articleNum].title + '. Would you like to hear more about this story?';
 
-            response.send(responseText);
+            response.send({ "fulfillmentText": responseText });
         });
         res.on('error', (e) => { console.log(e); });
     });
@@ -155,19 +153,19 @@ function findHeadlineCountryCategory(response, country, category) {
 function findDescriptionCountryCategory(response, country, category) {
     //Api call to retrieve data
     https.get('https://newsapi.org/v2/top-headlines?country=' + country + '&category=' + category + '&apiKey=0eefa07bb1bb480bad3277dcfc313086', (res) => {
-        var body = '';
+        let body = '';
 
         res.on('data', (d) => { body += d; });
         res.on('end', () => {
-            var json = JSON.parse(body);
-            var articleNum = 0;
+            const json = JSON.parse(body);
+            let articleNum = 0;
 
             while (json.articles[articleNum].description === null && articleNum < 10)
                 articleNum++;
 
             const responseText = 'Here is some more information. ' + json.articles[articleNum].description + '. If you would like to hear more news, simply ask. You can specify country, topic or source.';
 
-            response.send(responseText);
+            response.send({ "fulfillmentText": responseText });
         });
         res.on('error', (e) => { console.log(e); });
     });
