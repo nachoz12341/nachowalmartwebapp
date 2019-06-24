@@ -20,8 +20,10 @@ var sourceMap = {
 
 //Answer dialogflow post request
 app.post('/', (req, res) => {
-
     let data = '';
+
+    console.log("Got post request");
+
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
         const session = JSON.parse(data);
