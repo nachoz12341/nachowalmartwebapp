@@ -22,7 +22,7 @@ app.post('/', (req, res) => {
         let session = JSON.parse(data);        
         //let intent = session.fulfillmentText;
 
-        res.send({ "fulfillmentText": JSON.stringify(session)});
+        res.send({ "fulfillmentText": JSON.stringify(session.intent)});
     });
 });
 
