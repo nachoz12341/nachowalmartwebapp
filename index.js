@@ -1,5 +1,5 @@
 const sql = require('mssql');
-//const intentController = require('./intentController');
+const https = require('https');
 const express = require('express');
 const app = express();
 
@@ -27,16 +27,38 @@ app.post('/', (req, res) => {
         let responseText = "This is the default response: "+intentName;
 
         if (intentName === "testConnection")
-            responseText = "The test has successfully responded: "+intentName;
-
-        if(intentName === "headlineSource")
         {
-            responseText = "Heres a headline from "+session.queryResult.parameters.source;
+            responseText = "The test has successfully responded: "+intentName;
+            res.send({ "fulfillmentText": responseText });
         }
 
-        res.send({ "fulfillmentText": responseText });
+        if(intentName === "headlineSource")
+            findHeadlineSource(res,session.queryResult.parameters.source);
+
+        
     });
 });
 
 const port = process.env.PORT || 1337;
 app.listen(port);
+
+
+
+function findHeadlineSource(response,source) {
+    https.get('https://newsapi.org/v2/top-headlines?sources='+source+'&apiKey=0eefa07bb1bb480bad3277dcfc313086', (res) => {
+        let body = '';
+
+        res.on('data', (d) =>{body+=d;});
+        res.on('end', () =>{
+            const json = JSON.parse(body);
+            let articleNum = 0;
+
+            while(json.articles[articleNum].description===null && articleNum<10)
+                articleNum++;
+
+            let responseText = 'This headline is from '+json.articles[articleNum].source.name+', '+json.articles[articleNum].title+'. Would you like to hear more about this story?'; 
+                
+            response.send({ "fulfillmentText": responseText });
+        });
+    });
+}
