@@ -33,8 +33,10 @@ app.post('/', (req, res) => {
         }
 
         if(intentName === "headlineSource")
-            findHeadlineSource(res,session.queryResult.parameters.source);
-
+        {
+            let source = sourceMap[session.queryResult.parameters.source];
+            findHeadlineSource(res,source);
+        }
         
     });
 });
