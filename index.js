@@ -19,14 +19,14 @@ app.post('/', (req, res) => {
     let data = '';
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
-        const session = JSON.parse(data);        
+        const session = JSON.parse(data);
         const intentName = session.queryResult.intent.dispalyName;
-        let responseText = "This is the default response"; 
+        let responseText = "This is the default response";
 
-        if(intentName==="testConnection")
-            responseText="The test has successfully responded.";            
+        if (intentName === "testConnection")
+            responseText = "The test has successfully responded.";
 
-        res.send({ "fulfillmentText": resonseText});
+        res.send({ "fulfillmentText": responseText });
     });
 });
 
