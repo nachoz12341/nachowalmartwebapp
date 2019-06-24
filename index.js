@@ -144,16 +144,14 @@ function findHeadlineCountryCategory(response, country, category) {
 
             const responseText = 'This headline is from ' + json.articles[articleNum].source.name + ', ' + json.articles[articleNum].title + '. Would you like to hear more about this story?';
 
-            if(country=="us")
-                response.send({ "fulfillmentText": responseText });
-            else
-                response.send({"fulfillmentText":json.aricles[articleNum].title,"languageCode": country});
+            response.send({ "fulfillmentText": responseText });
         });
         res.on('error', (e) => { console.log(e); });
     });
 }
 
 function findDescriptionCountryCategory(response, country, category) {
+    //Api call to retrieve data
     https.get('https://newsapi.org/v2/top-headlines?country=' + country + '&category=' + category + '&apiKey=0eefa07bb1bb480bad3277dcfc313086', (res) => {
         let body = '';
 
@@ -167,10 +165,7 @@ function findDescriptionCountryCategory(response, country, category) {
 
             const responseText = 'Here is some more information. ' + json.articles[articleNum].description + '. If you would like to hear more news, simply ask. You can specify country, topic or source.';
 
-            if(country=="us")
-                response.send({ "fulfillmentText": responseText });
-            else
-                response.send({"fulfillmentText":json.aricles[articleNum].description,"languageCode": country});
+            response.send({ "fulfillmentText": responseText });
         });
         res.on('error', (e) => { console.log(e); });
     });
