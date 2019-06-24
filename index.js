@@ -19,9 +19,9 @@ app.post('/', (req, res) => {
     let data = '';
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
-        const session = JSON.parse(data);
+        let intent = JSON.parse(data);
 
-        res.send({ "fullfillmentText": "Received info from "+session.intent.displayName});
+        res.send({ "fullfillmentText": intent});
     });
 });
 
