@@ -25,9 +25,9 @@ app.post('/', (req, res) => {
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
 
-        console.log("---------------------------");
-        console.log("url: "+Object.keys(req.params));
-        console.log("---------------------------");
+        console.log("---------------------------\n");
+        console.log(req.params);
+        console.log("\n---------------------------\n");
 
         const session = JSON.parse(data);
         const intentName = session.queryResult.intent.displayName;
