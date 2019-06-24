@@ -1,7 +1,9 @@
+const sql = require('mssql');
+const intentController = require('./intentController');
 const express = require('express');
 const app = express();
-const sql = require('mssql');
 
+//database login info
 const config = {
     user: 'library',
     password: 'Dallas2001',
@@ -15,6 +17,7 @@ const config = {
 
 sql.connect(config).catch(err => console.log(err));
 
+//Answer dialogflow post request
 app.post('/', (req, res) => {
     let data = '';
     req.on('data', (chunk) => { data += chunk; });
@@ -25,6 +28,11 @@ app.post('/', (req, res) => {
 
         if (intentName === "testConnection")
             responseText = "The test has successfully responded: "+intentName;
+
+        if(intentName === "headlineSource")
+        {
+            responseText = "Heres a headline from "+session.queryResult.parameters.source;
+        }
 
         res.send({ "fulfillmentText": responseText });
     });
