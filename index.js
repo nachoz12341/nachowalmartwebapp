@@ -26,8 +26,7 @@ app.post('/', (req, res) => {
     req.on('end', () => {
 
         console.log("---------------------------");
-        console.log("url: "+req.param);
-        console.log("Body: "+req.body);
+        console.log("url: "+req.params[name]);
         console.log("---------------------------");
 
         const session = JSON.parse(data);
