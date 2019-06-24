@@ -25,8 +25,8 @@ app.post('/', (req, res) => {
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
 
-        console.log("---------------------------\n");
-        console.log(req.params);
+        console.log("\n---------------------------\n");
+        console.log(req.body);
         console.log("\n---------------------------\n");
 
         const session = JSON.parse(data);
