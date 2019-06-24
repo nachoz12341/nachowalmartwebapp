@@ -1,4 +1,3 @@
-const auth = require('./auth');
 const https = require('https');
 const express = require('express');
 const app = express();
@@ -18,17 +17,41 @@ var sourceMap = {
     "cbs": "cbs-news"
 };
 
+var countryMap = {
+    "england": "gb",
+    "britain": "gb",
+    "uk": "gb",
+    "english": "gb",
+    "france": "fr",
+    "french": "fr",
+    "germany": "de",
+    "german": "de",
+    "united states": "us",
+    "america": "us",
+    "us": "us",
+    "usa": "us",
+    "american": "us"
+};
+
+var categoryMap = {
+    "general": "general",
+    "health": "health",
+    "science": "science",
+    "sports": "sports",
+    "technology": "technology",
+    "tech": "technology",
+    "entertainment": "entertainment",
+    "movies": "entertainment",
+    "movie": "entertainment",
+    "business": "business"
+};
+
 //Answer dialogflow post request
 app.post('/', (req, res) => {
     let data = '';
 
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
-
-        console.log("\n---------------------------\n");
-        console.log(req.params);
-        console.log("\n---------------------------\n");
-
         const session = JSON.parse(data);
         const intentName = session.queryResult.intent.displayName;
         let responseText = "This is the default response: " + intentName;
@@ -39,8 +62,26 @@ app.post('/', (req, res) => {
         }
 
         if (intentName === "headlineSource") {
-            let source = sourceMap[session.queryResult.parameters.source];
+            const source = sourceMap[session.queryResult.parameters.source];
             findHeadlineSource(res, source);
+        }
+
+        if(intentName === "headlineCountryCategory")
+        {
+            const country = countryMap[session.queryResult.parameters.country];
+            const category = categoryMap[session.queryResult.parameters.category];
+            findHeadlineCountryCategory(res,country,category);
+        }
+        if (intentName === "descriptionSource") {
+            const source = sourceMap[session.queryResult.parameters.source];
+            findDescriptionSource(res, source);
+        }
+
+        if(intentName === "descriptionCountryCategory")
+        {
+            const country = countryMap[session.queryResult.parameters.country];
+            const category = categoryMap[session.queryResult.parameters.category];
+            findDescriptionCountryCategory(res,country,category);
         }
 
     });
@@ -67,8 +108,67 @@ function findHeadlineSource(response, source) {
 
             response.send({ "fulfillmentText": responseText });
         });
-        res.on('error', (err) => {
-            console.log(err);
+        res.on('error', (err) => { console.log(err); });
+    });
+}
+
+function findDescriptionSource(response, source) {
+    https.get('https://newsapi.org/v2/top-headlines?sources=' + source + '&apiKey=0eefa07bb1bb480bad3277dcfc313086', (res) => {
+        var body = '';
+
+        res.on('data', (d) => { body += d; });
+        res.on('end', () => {
+            var json = JSON.parse(body);
+            var articleNum = 0;
+
+            while (json.articles[articleNum].description === null && articleNum < 10)
+                articleNum++;
+
+            var response = 'Here is some more information. ' + json.articles[articleNum].description + '. If you would like to hear more news, simply ask. You can specify country, topic or source.';
+
+            resolve(agent.add(response));
         });
+        res.on('error', (e) => { console.log(e); });
+    });
+}
+
+function findHeadlineCountryCategory(response, country, category) {
+    https.get('https://newsapi.org/v2/top-headlines?country=' + country + '&category=' + category + '&apiKey=0eefa07bb1bb480bad3277dcfc313086', (res) => {
+        var body = '';
+
+        res.on('data', (d) => { body += d; });
+        res.on('end', () => {
+            var json = JSON.parse(body);
+            var articleNum = 0;
+
+            while (json.articles[articleNum].description === null && articleNum < 10)
+                articleNum++;
+
+            const responseText = 'This headline is from ' + json.articles[articleNum].source.name + ', ' + json.articles[articleNum].title + '. Would you like to hear more about this story?';
+
+            response.send(responseText);
+        });
+        res.on('error', (e) => { console.log(e); });
+    });
+}
+
+function findDescriptionCountryCategory(response, country, category) {
+    //Api call to retrieve data
+    https.get('https://newsapi.org/v2/top-headlines?country=' + country + '&category=' + category + '&apiKey=0eefa07bb1bb480bad3277dcfc313086', (res) => {
+        var body = '';
+
+        res.on('data', (d) => { body += d; });
+        res.on('end', () => {
+            var json = JSON.parse(body);
+            var articleNum = 0;
+
+            while (json.articles[articleNum].description === null && articleNum < 10)
+                articleNum++;
+
+            const responseText = 'Here is some more information. ' + json.articles[articleNum].description + '. If you would like to hear more news, simply ask. You can specify country, topic or source.';
+
+            response.send(responseText);
+        });
+        res.on('error', (e) => { console.log(e); });
     });
 }
