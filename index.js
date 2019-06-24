@@ -1,5 +1,5 @@
 const sql = require('mssql');
-const intentController = require('./intentController');
+//const intentController = require('./intentController');
 const express = require('express');
 const app = express();
 
