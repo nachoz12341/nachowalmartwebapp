@@ -1,4 +1,4 @@
-const sql = require('mssql');
+const auth = require('./auth');
 const https = require('https');
 const express = require('express');
 const app = express();
@@ -15,25 +15,12 @@ var sourceMap = {
     "engadget": "engadget",
     "fortune": "fortune",
     "cbs news": "cbs-news",
-    "cbs": "cbs"
+    "cbs": "cbs-news"
 };
-
-//database login info
-const config = {
-    user: 'library',
-    password: 'Dallas2001',
-    server: 'pslibrarynacho.database.windows.net',
-    database: 'PSLibrary',
-
-    options: {
-        encrypt: true
-    }
-};
-
-sql.connect(config).catch(err => console.log(err));
 
 //Answer dialogflow post request
 app.post('/', (req, res) => {
+
     let data = '';
     req.on('data', (chunk) => { data += chunk; });
     req.on('end', () => {
@@ -42,7 +29,7 @@ app.post('/', (req, res) => {
         let responseText = "This is the default response: " + intentName;
 
         if (intentName === "testConnection") {
-            responseText = "The test has successfully responded: " + intentName;
+            responseText = "The test has successfully responded: " + session;
             res.send({ "fulfillmentText": responseText });
         }
 
@@ -74,6 +61,9 @@ function findHeadlineSource(response, source) {
             let responseText = 'This headline is from ' + json.articles[articleNum].source.name + ', ' + json.articles[articleNum].title + '. Would you like to hear more about this story?';
 
             response.send({ "fulfillmentText": responseText });
+        });
+        res.on('error', (err) => {
+            console.log(err);
         });
     });
 }
