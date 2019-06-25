@@ -11,7 +11,7 @@ function getIntentResponse(intent, sessionParams, callback) {
     if (intent === "testConnection")
         return callback("The test has completed successfully, the server is up.");
 
-    if (intent.includes('source')) {
+    if (intent.includes('Source')) {
         sourceId = entityMap.source[sessionParams.source];
         url += '&sources=' + sourceId;
     }
