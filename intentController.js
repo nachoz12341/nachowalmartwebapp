@@ -1,7 +1,7 @@
 const entityMap = require('./entityMap.js');
 const request = require('request');
 
-function getIntentResponse(intent, session, callback) {
+function getIntentResponse(intent, sessionParams, callback) {
     let sourceId = '';
     let countryId = '';
     let categoryId = '';
@@ -11,13 +11,13 @@ function getIntentResponse(intent, session, callback) {
     if (intent === "testConnection")
         return callback("The test has completed successfully, the server is up.");
 
-    if (intent === "headlineSource" || intent === "descriptionSource") {
-        sourceId = entityMap.source[session.queryResult.parameters.source];
+    if (intent.includes('source')) {
+        sourceId = entityMap.source[sessionParams.source];
         url += '&sources=' + sourceId;
     }
     else {
-        countryId = entityMap.country[session.queryResult.parameters.country];
-        categoryId = entityMap.category[session.queryResult.parameters.category];
+        countryId = entityMap.country[sessionParams.country];
+        categoryId = entityMap.category[sessionParams.category];
         url += '&country=' + countryId;
         url += '&category=' + categoryId;
     }

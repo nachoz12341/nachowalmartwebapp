@@ -9,8 +9,9 @@ app.use(bodyParser.json());
 //Answer dialogflow post request
 app.post('/', (req, res) => {
     const intentName = req.body.queryResult.intent.displayName;
+    const parameters = req.body.queryResult.parameters;
 
-    intentController.getIntentResponse(intentName, req.body, (responseText) => {
+    intentController.getIntentResponse(intentName, parameters, (responseText) => {
         res.send({ "fulfillmentText": responseText });
     });
 });
