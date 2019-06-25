@@ -1,20 +1,17 @@
+const intentController = require('./intentController.js');
+const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
-const intentController = require('./intentController.js');
 
-//Express body parser???
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 //Answer dialogflow post request
 app.post('/', (req, res) => {
-    let data = '';
+    const intentName = req.body.queryResult.intent.displayName;
 
-    req.on('data', (chunk) => { data += chunk; });
-    req.on('end', () => {
-        const session = JSON.parse(data);
-        const intentName = session.queryResult.intent.displayName;
-
-        intentController.getIntentResponse(intentName, session, (responseText) => {
-            res.send({ "fulfillmentText": responseText });
-        });
+    intentController.getIntentResponse(intentName, req.body, (responseText) => {
+        res.send({ "fulfillmentText": responseText });
     });
 });
 
