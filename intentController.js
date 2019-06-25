@@ -25,7 +25,7 @@ function getIntentResponse(intent, sessionParams, callback) {
     console.log(url);
 
     request(url, { json: true }, (err, res, body) => {
-        if (err) { return console.log(err); }
+        if (err) { console.log(err); return callback("Could not get a response. Is the server down?");}
         let responseText = '';
         let articleNum = 0;
 
