@@ -15,5 +15,9 @@ app.post('/', (req, res) => {
     });
 });
 
-const port = process.env.PORT || 1337;
+app.get('/', (req,res) =>{
+    res.send("Hello world!");
+});
+
+const port = process.env.PORT || 25565;
 app.listen(port);
